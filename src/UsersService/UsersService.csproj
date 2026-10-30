@@ -10,7 +10,7 @@
 
   <!-- C# classes are generated from the shared contract on every build; nothing generated is committed. -->
   <ItemGroup>
-    <Protobuf Include="../../../../proto/users.proto" GrpcServices="Server" Link="Protos/users.proto" />
+    <Protobuf Include="../../proto/users.proto" GrpcServices="Server" Link="Protos/users.proto" />
   </ItemGroup>
 
   <ItemGroup>

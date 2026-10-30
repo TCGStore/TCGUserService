@@ -1,12 +1,10 @@
-# Build context is the repo root (the build reads proto/users.proto):
-#   docker build -f services/users-service/Dockerfile .
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /repo
 COPY proto/ proto/
-COPY services/users-service/src/UsersService/UsersService.csproj services/users-service/src/UsersService/
-RUN dotnet restore services/users-service/src/UsersService/UsersService.csproj
-COPY services/users-service/src/ services/users-service/src/
-RUN dotnet publish services/users-service/src/UsersService/UsersService.csproj \
+COPY src/UsersService/UsersService.csproj src/UsersService/
+RUN dotnet restore src/UsersService/UsersService.csproj
+COPY src/ src/
+RUN dotnet publish src/UsersService/UsersService.csproj \
     -c Release -o /out --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

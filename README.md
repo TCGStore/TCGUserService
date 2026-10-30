@@ -20,26 +20,25 @@ tests/UsersService.Tests/   xUnit con EF Core en memoria (no necesita PostgreSQL
 ```
 
 A diferencia de catalog-service, el código gRPC **no se sube al repo**: el paquete
-`Grpc.Tools` lo genera en cada `dotnet build` a partir de `proto/users.proto`. Por eso
-el Dockerfile se construye desde la raíz del repo (necesita la carpeta `proto/`).
+`Grpc.Tools` lo genera en cada `dotnet build` a partir de `proto/users.proto`.
 
 ## Correr en local
 
 Requisitos: .NET 8 SDK y Docker.
 
 ```bash
-# desde la raíz del repo (una vez): crea .env y pon un JWT_SECRET
+# desde TCGBackend (una vez): crea .env y pon un JWT_SECRET
 cp .env.example .env
 openssl rand -base64 48   # copia el resultado en JWT_SECRET
 
 docker compose up -d postgres
 
-# desde services/users-service (lee el .env de la raíz)
+# desde este repo (lee el .env de TCGBackend)
 make run    # levanta el servidor en :50054
 make test
 ```
 
-O todo con Docker, desde la raíz:
+O todo con Docker, desde TCGBackend:
 
 ```bash
 docker compose up -d --build users-service
@@ -99,3 +98,9 @@ Para ver qué trae el token, pega el `access_token` en <https://jwt.io>.
 - La clave es `JWT_SECRET` tal cual (como texto UTF-8). En NestJS:
   `JwtModule.register({ secret: process.env.JWT_SECRET, verifyOptions: { algorithms: ['HS256'] } })`.
 - `expires_at` es `int64`: con `@grpc/proto-loader` conviene `longs: Number`.
+
+## Contratos
+
+Los archivos de `proto/` son una **copia** de los de `TCGBackend/proto`, que es la fuente
+de verdad. No se editan aquí: el cambio se acuerda con el equipo, se hace en `TCGBackend` y
+se copia con `./scripts/sync-proto.sh` (desde TCGBackend).
